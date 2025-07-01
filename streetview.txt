@@ -1,0 +1,95 @@
+<html>
+  <head>
+	<style>
+	html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map,
+#pano {
+  float: left;
+  height: 100%;
+  width: 50%;
+}
+	</style>
+    <title>Street View split-map-panes</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script type="module" src="./index.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="pano"></div>
+
+    <!-- 
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	function initialize() {
+	
+		var address = "{{table_addresses.selectedRow}}";
+		
+		var cleanAddress = address.replace(/ /g, '+');
+	
+		var googleMapsApi = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCEMF_DvY3UwEGbhC3auMYllHLGGxw2o_U&address=" + cleanAddress + ",+UK&sensor=false";
+	
+		$.getJSON( googleMapsApi, {
+			format: "json"
+		}).done(function( data ) {
+			var lat = data.results[0].geometry.location.lat
+			var lng = data.results[0].geometry.location.lng
+
+			var coords = { lat: lat, lng: lng }
+
+			const map = new google.maps.Map(document.getElementById("map"), {
+				center: coords,
+				zoom: 14,
+			});
+			
+			var streetViewMaxDistance = 50;
+
+			var streetViewService = new google.maps.StreetViewService();
+			
+			streetViewService.getPanoramaByLocation(coords, streetViewMaxDistance, function(streetViewPanoramaData, status) {
+			
+				if (status === google.maps.StreetViewStatus.OK) {
+					var cam_coords = streetViewPanoramaData.location.latLng;
+					var heading = google.maps.geometry.spherical.computeHeading(cam_coords, coords);
+					
+					// Existing
+					const panorama = new google.maps.StreetViewPanorama(
+						document.getElementById("pano"),
+						{
+							position: coords,
+							pov: {
+								heading: heading,
+								pitch: 10,
+							},
+						}
+					);
+
+					map.setStreetView(panorama);
+					
+				}
+					
+			});
+			
+		});
+	}
+
+	window.initialize = initialize;
+	</script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEMF_DvY3UwEGbhC3auMYllHLGGxw2o_U&callback=initialize&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
