@@ -53,20 +53,9 @@ export default function PropertiesPage() {
     <DashboardLayout>
       {/* Page Header */}
       <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-100">Property Search</h1>
-            <p className="text-gray-400 mt-1">Search and analyze UK property data</p>
-          </div>
-          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-            apiStatus === 'connected' ? 'bg-green-900 text-green-300 border border-green-700' :
-            apiStatus === 'error' ? 'bg-red-900 text-red-300 border border-red-700' :
-            'bg-yellow-900 text-yellow-300 border border-yellow-700'
-          }`}>
-            {apiStatus === 'connected' ? '● API Connected' :
-             apiStatus === 'error' ? '● API Offline' :
-             '● Connecting...'}
-          </div>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-100">Property Search</h1>
+          <p className="text-gray-400 mt-1">Search and analyze UK property data</p>
         </div>
       </div>
 

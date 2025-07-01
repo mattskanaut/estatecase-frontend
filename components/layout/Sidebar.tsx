@@ -19,14 +19,14 @@ interface SidebarProps {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
-  { name: 'Property Search', href: '/properties', icon: MagnifyingGlassIcon },
-  { name: 'My Portfolio', href: '/portfolio', icon: BuildingOfficeIcon },
-  { name: 'Market Analysis', href: '/analysis', icon: ChartBarIcon },
-  { name: 'Deals Pipeline', href: '/deals', icon: FolderIcon },
-  { name: 'Area Maps', href: '/maps', icon: MapIcon },
-  { name: 'Alerts', href: '/alerts', icon: BellIcon },
-  { name: 'Settings', href: '/settings', icon: CogIcon },
+  { name: 'Dashboard', href: '/', icon: HomeIcon, color: 'text-blue-400' },
+  { name: 'Property Search', href: '/properties', icon: MagnifyingGlassIcon, color: 'text-green-400' },
+  { name: 'My Portfolio', href: '/portfolio', icon: BuildingOfficeIcon, color: 'text-purple-400' },
+  { name: 'Market Analysis', href: '/analysis', icon: ChartBarIcon, color: 'text-yellow-400' },
+  { name: 'Deals Pipeline', href: '/deals', icon: FolderIcon, color: 'text-orange-400' },
+  { name: 'Area Maps', href: '/maps', icon: MapIcon, color: 'text-teal-400' },
+  { name: 'Alerts', href: '/alerts', icon: BellIcon, color: 'text-red-400' },
+  { name: 'Settings', href: '/settings', icon: CogIcon, color: 'text-gray-400' },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -63,8 +63,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     }`}
                   >
                     <item.icon
-                      className={`mr-3 h-5 w-5 flex-shrink-0 ${
-                        isActive ? 'text-blue-400' : 'text-gray-400 group-hover:text-gray-300'
+                      className={`mr-3 h-5 w-5 flex-shrink-0 transition-colors ${
+                        isActive ? item.color : `text-gray-400 group-hover:${item.color.replace('400', '500')}`
                       }`}
                     />
                     {item.name}
@@ -132,8 +132,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     }`}
                   >
                     <item.icon
-                      className={`mr-3 h-5 w-5 flex-shrink-0 ${
-                        isActive ? 'text-blue-400' : 'text-gray-400 group-hover:text-gray-300'
+                      className={`mr-3 h-5 w-5 flex-shrink-0 transition-colors ${
+                        isActive ? item.color : `text-gray-400 group-hover:${item.color.replace('400', '500')}`
                       }`}
                     />
                     {item.name}

@@ -45,6 +45,30 @@ export interface PropertyDetails {
   country?: string;
   country_code?: string;
   
+  // BLPU (Basic Land and Property Unit) information
+  blpu_state_code?: string;
+  blpu_state_code_description?: string;
+  blpu_state_date?: string;
+  
+  // Postal address information
+  postal_address_code?: string;
+  postal_address_code_description?: string;
+  delivery_point_suffix?: string;
+  
+  // Geographic and administrative boundaries
+  topography_layer_toid?: string;
+  ward_code?: string;
+  parish_code?: string;
+  parent_uprn?: string;
+  
+  // Date information
+  entry_date?: string;
+  
+  // Language and matching information
+  language?: string;
+  match?: number;
+  match_description?: string;
+  
   // Property characteristics
   property_characteristics?: Record<string, any>;
   energy_rating?: string;
@@ -56,6 +80,9 @@ export interface PropertyDetails {
   // Metadata
   last_updated?: string;
   data_source?: string;
+  
+  // Search-specific
+  search_score?: number;
 }
 
 export interface PropertySearchResponse {

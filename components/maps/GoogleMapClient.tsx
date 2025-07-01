@@ -179,9 +179,6 @@ export default function GoogleMapClient({ coordinates, address, className = '' }
     <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 ${className}`}>
       {/* Map */}
       <div className="relative">
-        <div className="absolute top-2 left-2 z-10 bg-gray-800 border border-gray-600 px-2 py-1 rounded shadow text-xs font-medium text-gray-300">
-          Map View
-        </div>
         <div 
           ref={mapContainerRef}
           className="w-full h-64 lg:h-80 rounded-lg bg-gray-700 border border-gray-600"
@@ -190,9 +187,6 @@ export default function GoogleMapClient({ coordinates, address, className = '' }
 
       {/* Street View */}
       <div className="relative">
-        <div className="absolute top-2 left-2 z-10 bg-gray-800 border border-gray-600 px-2 py-1 rounded shadow text-xs font-medium text-gray-300">
-          Street View
-        </div>
         <div 
           ref={streetViewContainerRef}
           className="w-full h-64 lg:h-80 rounded-lg bg-gray-700 border border-gray-600"

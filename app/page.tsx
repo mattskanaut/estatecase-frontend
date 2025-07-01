@@ -59,7 +59,7 @@ export default function DashboardPage() {
               <div className="flex-shrink-0 w-2 h-2 bg-blue-400 rounded-full mt-2"></div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-300">Property searched</p>
-                <p className="text-xs text-gray-500">1, BEAUMONT ROAD, LONDON • 2 mins ago</p>
+                <p className="text-xs text-gray-500">1 BEAUMONT ROAD, LONDON • 2 mins ago</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
