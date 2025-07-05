@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { PropertyDetails as PropertyDetailsType } from '@/lib/api/client';
 import GoogleMapWrapper from '@/components/maps/GoogleMapWrapper';
 
@@ -9,6 +10,7 @@ interface PropertyDetailsProps {
 }
 
 export default function PropertyDetails({ property }: PropertyDetailsProps) {
+  const router = useRouter();
   const [showAllDetails, setShowAllDetails] = useState(false);
   
   const formatPrice = (price: number) => {
@@ -26,10 +28,10 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
   return (
     <div>
       {/* Header */}
-      <div className="border-b border-gray-800 pb-4 mb-6">
-        <div className="flex justify-between items-start mb-3">
+      <div className="border-b border-gray-800 pb-3 mb-4">
+        <div className="flex justify-between items-start mb-2">
           <div className="flex-1">
-            <h2 className="text-xl font-semibold text-gray-100 mb-1">
+            <h2 className="text-lg font-semibold text-gray-100 mb-1">
               {property.address}
             </h2>
             {property.post_town && property.post_town !== property.address && (
@@ -81,7 +83,7 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
         <div className="mt-3">
           <button
             onClick={() => setShowAllDetails(!showAllDetails)}
-            className="w-full flex items-center justify-between p-3 bg-gray-900 hover:bg-gray-850 rounded-lg border border-gray-800 transition-colors"
+            className="w-full flex items-center justify-between p-3 bg-gray-900 hover:bg-gray-850 rounded border border-gray-800 transition-colors"
           >
             <span className="text-xs font-medium text-gray-400">
               {showAllDetails ? 'Hide' : 'Show'} Property Details
@@ -97,7 +99,7 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
           </button>
           
           {showAllDetails && (
-            <div className="mt-3 p-4 bg-gray-900 rounded-lg border border-gray-800">
+            <div className="mt-3 p-4 bg-gray-900 rounded border border-gray-800">
               <div className="space-y-3">
                 {/* Identifiers */}
                 <div>
@@ -226,14 +228,21 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
         {/* Lease Information - Full View */}
         {property.lease_data && property.lease_data.length > 0 && (
           <div>
-            <h3 className="text-sm font-semibold text-gray-200 mb-3 flex items-center">
+            <h3 className="text-sm font-semibold text-gray-200 mb-2 flex items-center">
               <span className="mr-2">Lease Information</span>
               <span className="text-xs text-gray-500">({property.lease_data.length})</span>
             </h3>
-            <div className="space-y-3">
-              {property.lease_data.map((lease: any, index: number) => (
-                <div key={index} className="bg-gray-900 p-3 rounded-lg border border-gray-800">
-                  <div className="flex justify-between items-start mb-2">
+            <div className="space-y-2">
+              {[...property.lease_data]
+                .sort((a, b) => {
+                  // Sort by end_date (latest expiry first), then by start_date if no end_date
+                  const dateA = a.end_date || a.start_date || a.date_of_lease || '';
+                  const dateB = b.end_date || b.start_date || b.date_of_lease || '';
+                  return new Date(dateB).getTime() - new Date(dateA).getTime();
+                })
+                .map((lease: any, index: number) => (
+                <div key={index} className="bg-gray-900 p-2 rounded border border-gray-800">
+                  <div className="flex justify-between items-start mb-1">
                     <h4 className="text-xs font-medium text-gray-400">Lease #{index + 1}</h4>
                     {lease.tenure && (
                       <span className="text-xs px-2 py-0.5 bg-purple-900/50 text-purple-400 rounded border border-purple-800">
@@ -307,16 +316,23 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
         {/* Price History - Full View */}
         {property.price_history && property.price_history.length > 0 && (
           <div>
-            <h3 className="text-sm font-semibold text-gray-200 mb-3 flex items-center">
+            <h3 className="text-sm font-semibold text-gray-200 mb-2 flex items-center">
               <span className="mr-2">Price History</span>
               <span className="text-xs text-gray-500">({property.price_history.length})</span>
             </h3>
-            <div className="space-y-3">
-              {property.price_history.map((transaction: any, index: number) => (
-                <div key={index} className="bg-gray-900 p-3 rounded-lg border border-gray-800">
-                  <div className="flex justify-between items-start mb-2">
+            <div className="space-y-2">
+              {[...property.price_history]
+                .sort((a, b) => {
+                  // Sort by date (newest first)
+                  const dateA = a.date || a.date_of_transfer || '';
+                  const dateB = b.date || b.date_of_transfer || '';
+                  return new Date(dateB).getTime() - new Date(dateA).getTime();
+                })
+                .map((transaction: any, index: number) => (
+                <div key={index} className="bg-gray-900 p-2 rounded border border-gray-800">
+                  <div className="flex justify-between items-start mb-1">
                     <div>
-                      <div className="font-semibold text-base text-cyan-400">
+                      <div className="font-semibold text-sm text-cyan-400">
                         {formatPrice(transaction.price)}
                       </div>
                       <div className="text-xs text-gray-400 mt-0.5">
@@ -356,6 +372,63 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
           </div>
         )}
       </div>
+
+      {/* Linked Deals */}
+      {property.deals && property.deals.length > 0 && (
+        <div className="mt-6 pt-6 border-t border-gray-800">
+          <h3 className="text-sm font-semibold text-gray-200 mb-3 flex items-center gap-2">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" />
+              <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+            </svg>
+            Linked Deals ({property.deals.length})
+          </h3>
+          <div className="space-y-3">
+            {property.deals.map((deal) => (
+              <div 
+                key={deal.id} 
+                className="bg-gray-800 border border-gray-600 rounded p-4 hover:bg-gray-700 transition-all cursor-pointer"
+                onClick={() => router.push(`/deals/${deal.id}`)}
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-200 text-lg mb-1 hover:text-blue-300 transition-colors">
+                      {deal.name}
+                    </h4>
+                    {deal.background && (
+                      <p className="text-gray-400 text-sm mb-2">{deal.background}</p>
+                    )}
+                    <div className="flex items-center space-x-4 text-sm">
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        deal.status === 'won' ? 'bg-green-100 text-green-800' :
+                        deal.status === 'lost' ? 'bg-red-100 text-red-800' :
+                        deal.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {deal.status}
+                      </span>
+                      {deal.price && (
+                        <span className="text-emerald-400 font-medium">
+                          {new Intl.NumberFormat('en-GB', {
+                            style: 'currency',
+                            currency: deal.currency || 'GBP',
+                          }).format(deal.price)}
+                        </span>
+                      )}
+                      <span className="text-gray-500 text-xs">
+                        Created: {new Date(deal.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Location with Map and Street View */}
       <div className="mt-6 pt-6 border-t border-gray-800">

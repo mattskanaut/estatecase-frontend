@@ -7,9 +7,10 @@ interface GoogleMapsIntegrationProps {
   coordinates: { lat: number; lng: number };
   address?: string;
   className?: string;
+  onError?: () => void;
 }
 
-export default function GoogleMapsIntegration({ coordinates, address, className = '' }: GoogleMapsIntegrationProps) {
+export default function GoogleMapsIntegration({ coordinates, address, className = '', onError }: GoogleMapsIntegrationProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const streetViewContainerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -75,6 +76,7 @@ export default function GoogleMapsIntegration({ coordinates, address, className 
       
       if (!apiKey) {
         setError('Google Maps API key not configured');
+        onError?.();
         isInitializingRef.current = false;
         return;
       }
@@ -205,6 +207,7 @@ export default function GoogleMapsIntegration({ coordinates, address, className 
         console.error('Error loading Google Maps:', err);
         if (isMountedRef.current) {
           setError('Failed to load Google Maps');
+          onError?.();
         }
       } finally {
         isInitializingRef.current = false;

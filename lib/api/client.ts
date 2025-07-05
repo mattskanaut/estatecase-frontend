@@ -76,6 +76,7 @@ export interface PropertyDetails {
   // Relationship data
   lease_data?: Array<Record<string, any>>;
   price_history?: Array<Record<string, any>>;
+  deals?: Deal[];
   
   // Metadata
   last_updated?: string;
@@ -90,6 +91,163 @@ export interface PropertySearchResponse {
   has_next: boolean;
   total_count?: number;
   next_cursor?: string;
+}
+
+// Search types matching the backend models
+export interface SearchHighlight {
+  field: string;
+  texts: string[];
+}
+
+export interface Deal {
+  id: string;
+  name: string;
+  background?: string;
+  status: string;
+  price?: number;
+  currency: string;
+  category?: string;
+  tags: string[];
+  author_name?: string;
+  owner_name?: string;
+  party_names: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EnrichedEntity {
+  entity_type: string;
+  entity_id: string;
+  score: number;
+  deal?: Deal;
+  property?: PropertyDetails;
+  notes: any[];
+  tags: any[];
+  people: any[];
+  companies: any[];
+  deals: Deal[];
+  properties: PropertyDetails[];
+  updated_at: string;
+  created_at: string;
+  highlights: SearchHighlight[];
+}
+
+export interface SearchResponse {
+  results: EnrichedEntity[];
+  total_count: number;
+  query: string;
+  filters_applied: Record<string, any>;
+  execution_time_ms: number;
+  limit: number;
+  offset: number;
+  has_more: boolean;
+}
+
+export interface SearchParams {
+  q: string;
+  limit?: number;
+  offset?: number;
+  entity_types?: string;
+  updated_after?: string;
+  updated_before?: string;
+  status?: string;
+  price_min?: number;
+  price_max?: number;
+  postcode?: string;
+  author_id?: string;
+  owner_id?: string;
+}
+
+// Deal detail types
+export interface AttachmentDTO {
+  id: string;
+  filename: string;
+  content_type: string;
+  file_size: number;
+  uploaded_at: string;
+  blob_name?: string;
+  download_url?: string;
+}
+
+export interface NoteDTO {
+  id: string;
+  body: string;
+  author_id?: string;
+  author_name?: string;
+  created_at: string;
+  updated_at: string;
+  attachments: AttachmentDTO[];
+}
+
+export interface PersonDTO {
+  id: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  email?: string;
+  phone_work?: string;
+  phone_mobile?: string;
+  company_id?: string;
+  company_name?: string;
+  title?: string;
+}
+
+export interface CompanyDTO {
+  id: string;
+  name: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  address?: string;
+}
+
+export interface PropertySummaryDTO {
+  uprn: string;
+  address: string;
+  postcode: string;
+  relationship_type: string;
+  classification?: string;
+  status?: string;
+}
+
+export interface DealCategoryDTO {
+  id: string;
+  name: string;
+  color?: string;
+}
+
+export interface TagDTO {
+  id: string;
+  name: string;
+  slug: string;
+  color?: string;
+  description?: string;
+}
+
+export interface DealDetailDTO {
+  id: string;
+  name: string;
+  background?: string;
+  status: string;
+  currency: string;
+  price?: number;
+  price_type: string;
+  created_at: string;
+  updated_at: string;
+  status_changed_on?: string;
+  category?: DealCategoryDTO;
+  author?: PersonDTO;
+  owner?: PersonDTO;
+  parties: PersonDTO[];
+  companies: CompanyDTO[];
+  notes: NoteDTO[];
+  properties: PropertySummaryDTO[];
+  tags: TagDTO[];
+  total_notes: number;
+  total_attachments: number;
+  total_parties: number;
+  highrise_id?: number;
+  highrise_url?: string;
 }
 
 class ApiClient {
@@ -162,6 +320,31 @@ class ApiClient {
       enrich: enrich.toString(),
     });
     return this.request<PropertyDetails>(`/api/properties/${uprn}?${params}`);
+  }
+
+  // Unified search method
+  async search(params: SearchParams): Promise<SearchResponse> {
+    const searchParams = new URLSearchParams();
+    searchParams.append('q', params.q);
+    
+    if (params.limit !== undefined) searchParams.append('limit', params.limit.toString());
+    if (params.offset !== undefined) searchParams.append('offset', params.offset.toString());
+    if (params.entity_types) searchParams.append('entity_types', params.entity_types);
+    if (params.updated_after) searchParams.append('updated_after', params.updated_after);
+    if (params.updated_before) searchParams.append('updated_before', params.updated_before);
+    if (params.status) searchParams.append('status', params.status);
+    if (params.price_min !== undefined) searchParams.append('price_min', params.price_min.toString());
+    if (params.price_max !== undefined) searchParams.append('price_max', params.price_max.toString());
+    if (params.postcode) searchParams.append('postcode', params.postcode);
+    if (params.author_id) searchParams.append('author_id', params.author_id);
+    if (params.owner_id) searchParams.append('owner_id', params.owner_id);
+    
+    return this.request<SearchResponse>(`/api/search?${searchParams}`);
+  }
+
+  // Deal detail method
+  async getDealDetail(dealId: string): Promise<DealDetailDTO> {
+    return this.request<DealDetailDTO>(`/api/deals/${dealId}`);
   }
 
   // Health check

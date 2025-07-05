@@ -21,9 +21,8 @@ interface SidebarProps {
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, color: 'text-blue-400' },
   { name: 'Property Search', href: '/properties', icon: MagnifyingGlassIcon, color: 'text-green-400' },
-  { name: 'My Portfolio', href: '/portfolio', icon: BuildingOfficeIcon, color: 'text-purple-400' },
+  { name: 'Deals', href: '/deals', icon: FolderIcon, color: 'text-purple-400' },
   { name: 'Market Analysis', href: '/analysis', icon: ChartBarIcon, color: 'text-yellow-400' },
-  { name: 'Deals Pipeline', href: '/deals', icon: FolderIcon, color: 'text-orange-400' },
   { name: 'Area Maps', href: '/maps', icon: MapIcon, color: 'text-teal-400' },
   { name: 'Alerts', href: '/alerts', icon: BellIcon, color: 'text-red-400' },
   { name: 'Settings', href: '/settings', icon: CogIcon, color: 'text-gray-400' },
@@ -40,7 +39,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* Logo */}
           <div className="flex h-16 flex-shrink-0 items-center px-4 bg-gray-900">
             <div className="flex items-center">
-              <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center">
                 <BuildingOfficeIcon className="h-5 w-5 text-white" />
               </div>
               <span className="ml-3 text-white font-semibold text-lg">PropertyPro</span>
@@ -78,7 +77,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex flex-shrink-0 border-t border-gray-700 p-4">
             <div className="group block w-full flex-shrink-0">
               <div className="flex items-center">
-                <div className="h-8 w-8 bg-gray-600 rounded-full flex items-center justify-center">
+                <div className="h-8 w-8 bg-gray-600 rounded flex items-center justify-center">
                   <span className="text-sm font-medium text-gray-300">U</span>
                 </div>
                 <div className="ml-3">
@@ -99,7 +98,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* Logo */}
           <div className="flex h-16 flex-shrink-0 items-center px-4 bg-gray-900">
             <div className="flex items-center">
-              <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center">
                 <BuildingOfficeIcon className="h-5 w-5 text-white" />
               </div>
               <span className="ml-3 text-white font-semibold text-lg">PropertyPro</span>
@@ -147,7 +146,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex flex-shrink-0 border-t border-gray-700 p-4">
             <div className="group block w-full flex-shrink-0">
               <div className="flex items-center">
-                <div className="h-8 w-8 bg-gray-600 rounded-full flex items-center justify-center">
+                <div className="h-8 w-8 bg-gray-600 rounded flex items-center justify-center">
                   <span className="text-sm font-medium text-gray-300">U</span>
                 </div>
                 <div className="ml-3">

@@ -58,12 +58,12 @@ export default function PropertySearch({ onPropertySelect }: PropertySearchProps
               onChange={(e) => setQuery(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Search for any property address in the UK..."
-              className="w-full pl-10 pr-24 py-3 text-lg border border-gray-600 bg-gray-700 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm placeholder:text-gray-400"
+              className="w-full pl-10 pr-24 py-3 text-lg border border-gray-600 bg-gray-700 text-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm placeholder:text-gray-400"
             />
             <button
               onClick={handleSearch}
               disabled={loading || !query.trim()}
-              className="absolute inset-y-0 right-0 flex items-center px-6 text-white bg-blue-600 rounded-r-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="absolute inset-y-0 right-0 flex items-center px-6 text-white bg-blue-600 rounded-r hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -86,7 +86,7 @@ export default function PropertySearch({ onPropertySelect }: PropertySearchProps
         )}
 
         {results.length > 0 && (
-          <div className="absolute z-10 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-80 overflow-y-auto">
+          <div className="absolute z-10 w-full bg-gray-800 border border-gray-600 rounded shadow-xl max-h-80 overflow-y-auto">
             <div className="p-3 bg-gray-700 border-b border-gray-600">
               <div className="text-sm font-medium text-gray-300">
                 Found {results.length} matching address{results.length !== 1 ? 'es' : ''}
@@ -108,7 +108,7 @@ export default function PropertySearch({ onPropertySelect }: PropertySearchProps
                   </div>
                   <div className="flex flex-col items-end space-y-1">
                     {result.match_score && (
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded font-medium">
                         {Math.round(result.match_score * 100)}% match
                       </span>
                     )}

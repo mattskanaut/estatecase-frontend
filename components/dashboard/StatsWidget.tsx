@@ -43,7 +43,7 @@ export default function StatsWidget({ title, value, change, icon, className = ''
   };
 
   return (
-    <div className={`bg-gray-800 border border-gray-700 rounded-lg p-4 ${className}`}>
+    <div className={`bg-gray-800 border border-gray-700 rounded p-4 ${className}`}>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-gray-400">{title}</p>
@@ -56,7 +56,7 @@ export default function StatsWidget({ title, value, change, icon, className = ''
           )}
         </div>
         {icon && (
-          <div className="p-2 bg-gray-700 rounded-lg">
+          <div className="p-2 bg-gray-700 rounded">
             {icon}
           </div>
         )}
